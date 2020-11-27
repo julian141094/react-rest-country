@@ -22,3 +22,15 @@ export default async function getCountries(zone) {
   }
   return to_return
 }
+
+export async function getSingleCountry(element) {
+  let to_return = null
+  await axios.get(`https://restcountries.eu/rest/v2/name/${element}`)
+    .then((response)=>{
+      to_return = response.data
+    })
+    .catch((error) => {
+      console.log('https://restcountries.eu/rest/v2/name/ ->', error);
+    })
+  return to_return
+}
