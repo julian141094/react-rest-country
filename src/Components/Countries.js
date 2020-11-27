@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react'
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
-import axios from 'axios'
+
+import getCountries from '../Services/CountriesService'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -31,26 +31,55 @@ const useStyles = makeStyles((theme) => ({
 
 const Countries = () => {
 
+  const classes = useStyles();
+
   // States
-  const [allCountries, setAllCountries] = useState([])
+  const [countries, setCountries] = useState([])
+  const [region, setRegion] = useState('All')
+  const options = [
+    {
+      value: 'All',
+      label: 'All',
+    },
+    {
+      value: 'africa',
+      label: 'Africa',
+    },
+    {
+      value: 'americas',
+      label: 'Americas',
+    },
+    {
+      value: 'asia',
+      label: 'Asia',
+    },
+    {
+      value: 'europe',
+      label: 'Europe',
+    },
+    {
+      value: 'oceania',
+      label: 'Oceania',
+    },
+  ]
+  
   
   // UseEffect
-  useEffect(()=>{
-    console.log('Hola al inicio');
-    countries()
+  useEffect(async ()=>{
+    let qry = await getCountries('All')
+    setCountries(qry)
   }, [])
 
-  const classes = useStyles();
+  useEffect(()=>{
+    console.log('Countries->', countries);
+  }, [countries])
+
   
-  const countries = async () => {
-    axios.get('https://restcountries.eu/rest/v2/all')
-    .then((response)=>{
-      console.log('Response ->', response);
-    })
-    .catch((error) => {
-        console.log('Error on get https://restcountries.eu/rest/v2/all ->', error);
-      })
-  }
+  const handleChange = async (event) => {
+    setRegion(event.target.value);
+    let qry = await getCountries(event.target.value)
+    setCountries(qry)
+  };
   
   const Filters = () => {
     return (
@@ -60,13 +89,32 @@ const Countries = () => {
     )
   }
 
+
+
   const SelectArea = () => {
     return (
-      <span>SelectArea</span>
+      <form noValidate autoComplete="off">
+        <div>
+          <TextField
+            id="standard-select-region"
+            select
+            label="Filter by Region"
+            value={region}
+            onChange={handleChange}
+            helperText="Please select your region"
+          >
+            {options.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </TextField>
+        </div>
+      </form>
     )
   }
 
-  const Cards = () => {
+  const Card = () => {
     return (
       <span>Banderas</span>
     )
@@ -79,8 +127,18 @@ const Countries = () => {
           <Filters/>
           <SelectArea/>
         </Grid>
-        <Grid item xs={3} className={classes.itemsGrid}>
-          <Cards/>
+        <Grid item xs={12}>
+          <Card/>
+        </Grid>
+        <Grid container>
+          { countries.map((element, key) => {
+            return (
+              <Grid item xs={3} className={classes.itemsGrid}>
+                {/* <Card/> */}
+                <span>{key}</span>
+              </Grid>
+            )
+          }) }
         </Grid>
       </Grid>
     </div>
