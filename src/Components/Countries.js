@@ -2,9 +2,11 @@ import React, {useState, useEffect} from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import MenuItem from '@material-ui/core/MenuItem';
+import InputBase from '@material-ui/core/InputBase';
+import SearchIcon from '@material-ui/icons/Search';
+import IconButton from '@material-ui/core/IconButton';
 import axios from 'axios'
+import { red } from '@material-ui/core/colors';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -13,7 +15,6 @@ const useStyles = makeStyles((theme) => ({
   },
   generalGrid: {
     padding: theme.spacing(2),
-    flexDirection: "column"
   },
   filterGrid: {
     display: 'flex',
@@ -25,8 +26,11 @@ const useStyles = makeStyles((theme) => ({
   },
   textField: {
     width: '65ch',
+  },
+  paper:{
+    padding: '5px 7px',
+    backgroundColor:'var(--elements)',
   }
-  
 }));
 
 const Countries = () => {
@@ -54,9 +58,15 @@ const Countries = () => {
   
   const Filters = () => {
     return (
-      <form className={classes.textField} noValidate autoComplete="off">
-        <TextField id="search" label="Search for a Country" />
-      </form>
+      <Paper component="form" className={classes.paper}>
+        <IconButton type="submit" className={classes.iconButton} aria-label="search">
+          <SearchIcon color="white"/>
+        </IconButton>
+        <InputBase id="search" placeholder="Search for a Country"
+          inputProps={{ 'aria-label': 'search google maps' }} />
+      </Paper>
+      // <form className={classes.textField} noValidate autoComplete="off">
+      // </form>
     )
   }
 
@@ -75,8 +85,10 @@ const Countries = () => {
   return (
     <div className={classes.root}>
       <Grid container className={classes.generalGrid}>
-        <Grid item xs={12} className={classes.filterGrid}>
+        <Grid item xs={12} sm={6} className={classes.filterGrid}>
           <Filters/>
+        </Grid>
+        <Grid item xs={12} sm={6} className={classes.filterGrid}>
           <SelectArea/>
         </Grid>
         <Grid item xs={3} className={classes.itemsGrid}>

@@ -22,9 +22,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Navigator = () => {
+const Navigator = ({setDarkMode, dark}) => {
   const classes = useStyles();
-
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -32,7 +31,8 @@ const Navigator = () => {
           <Typography variant="h6" className={classes.title}>
             Where in the world?
           </Typography>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+          <IconButton edge="start" onClick={() => setDarkMode(!dark)}
+            className={classes.menuButton} color="inherit" aria-label="menu">
             <Brightness2Icon />
           </IconButton>
         </Toolbar>

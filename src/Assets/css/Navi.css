@@ -1,5 +1,23 @@
+:root{
+  --elements:hsl(0, 0%, 100%);
+  --background:hsl(0, 0%, 52%);
+  --text:black;
+}
+
+body {
+  background-color:var(--background);
+}
+
+.MuiAppBar-colorPrimary {
+  background-color: var(--elements) !important;
+  color: var(--text) !important;
+}
+
+input[placeholder], [placeholder], *[placeholder] {
+  color: var(--text) !important;
+}
+
 .Navigator {
-  background-color: blue;
   margin: 0;
   padding-left: 15px;
   padding-right: 15px;
