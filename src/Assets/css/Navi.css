@@ -1,0 +1,16 @@
+.Navigator {
+  background-color: blue;
+  margin: 0;
+  padding-left: 15px;
+  padding-right: 15px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 4rem;
+  justify-content: space-between;
+}
+
+.ItemButtom {
+  background-color: transparent;
+  border-color: transparent;
+}
