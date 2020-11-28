@@ -4,12 +4,8 @@ import Grid from '@material-ui/core/Grid';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
-import TextField from '@material-ui/core/TextField';
-import MenuItem from '@material-ui/core/MenuItem';
-
-import Paper from '@material-ui/core/Paper';
-import getCountries from '../Services/CountriesService'
-
+import getCountries, { getSingleCountry } from '../Services/CountriesService'
+import { TextareaAutosize } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,10 +25,15 @@ const useStyles = makeStyles((theme) => ({
   textField: {
     width: '65ch',
   },
+  primartText:{
+    color:'var(--text)',
+    textAlign: 'center'
+  },
   paper:{
-    padding: '5px 7px',
+    padding: '15px',
     backgroundColor:'var(--elements)',
-  }
+    boxShadow:'0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);'
+  },
 }));
 
 const Countries = () => {
@@ -41,11 +42,13 @@ const Countries = () => {
 
   // States
   const [countries, setCountries] = useState([])
+  const [search, setSearch] = useState([])
   const [region, setRegion] = useState('All')
+  const searchRef = React.createRef();
   const options = [
     {
       value: 'All',
-      label: 'All',
+      label: 'Filter by Region',
     },
     {
       value: 'africa',
@@ -89,40 +92,45 @@ const Countries = () => {
   
   const Filters = () => {
     return (
-      <Paper component="form" className={classes.paper}>
-        <IconButton type="submit" className={classes.iconButton} aria-label="search">
+      <span className={classes.paper}>
+        <IconButton onClick={()=> handleSearch()} className={classes.iconButton} aria-label="search">
           <SearchIcon/>
         </IconButton>
-        <InputBase id="search" placeholder="Search for a Country"
+        <InputBase id="search" 
+          ref={searchRef}
+          // onChange={(evt) => handleSearch(evt)}
+          onBlur={(evt) => handleSearch(evt.target.value)}
+          defaultValue = {search}
+          placeholder="Search for a Country"
           inputProps={{ 'aria-label': 'search google maps' }} />
-      </Paper>
+      </span>
       // <form className={classes.textField} noValidate autoComplete="off">
       // </form>
     )
   }
 
-
+  const handleSearch = async (val) => {
+    let qry = await getSingleCountry(val === undefined ? searchRef.current.children[0].value : val)
+    setCountries(qry)
+    if(val !== undefined){
+      setSearch(val)
+    }
+  }
 
   const SelectArea = () => {
     return (
-      <form noValidate autoComplete="off">
-        <div>
-          <TextField
-            id="standard-select-region"
-            select
-            label="Filter by Region"
-            value={region}
-            onChange={handleChange}
-            helperText="Please select your region"
-          >
-            {options.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </TextField>
-        </div>
-      </form>
+      <select
+        label="Filter by Region"
+        placeholder="Please select your region"
+        value={region}
+        onChange={handleChange}
+      >
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
     )
   }
 
@@ -138,21 +146,26 @@ const Countries = () => {
         <Grid item xs={12} sm={6}>
           <Filters/>
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid container justify="flex-end" item xs={12} sm={6}>
           <SelectArea/>
         </Grid>
         <Grid item xs={12}>
           <Card/>
         </Grid>
         <Grid container>
-          { countries.map((element, key) => {
-            return (
-              <Grid item xs={3} className={classes.itemsGrid}>
-                {/* <Card/> */}
-                <span>{key}</span>
-              </Grid>
-            )
-          }) }
+          {
+            countries === null ? <h1 className={classes.primartText}>
+              Sin registros
+            </h1> :
+              countries.map((element, key) => {
+                return (
+                  <Grid item xs={3} className={classes.itemsGrid}>
+                    {/* <Card/> */}
+                    <span>{key}</span>
+                  </Grid>
+                )
+              }) 
+          }
         </Grid>
       </Grid>
     </div>
