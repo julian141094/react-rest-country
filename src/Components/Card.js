@@ -57,7 +57,6 @@ const Card = ({
       <Grid container className={classes.general}>
         <Grid container className={classes.generalCard}>
           <Grid className={classes.img} >
-            {/* <img src={image} width={'100%'} className={classes.img}/> */}
           </Grid>
           <Grid className={classes.textArea}>
             <Grid className={classes.textName}>

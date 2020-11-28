@@ -42,3 +42,19 @@ export async function getSingleCountry(element) {
     })
   return to_return
 }
+
+/**
+ * Get a countrie by the alpha3Code
+ * @param {*} alpha3Code string
+ */
+export async function getAlphaCode(alpha3Code) {
+  let to_return = null
+  await axios.get(`https://restcountries.eu/rest/v2/alpha/${alpha3Code}`)
+    .then((response)=>{
+      to_return = response.data
+    })
+    .catch((error) => {
+      console.log('https://restcountries.eu/rest/v2/alpha/ ->', error);
+    })
+  return to_return
+}

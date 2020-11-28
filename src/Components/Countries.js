@@ -4,15 +4,12 @@ import Grid from '@material-ui/core/Grid';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
-import TextField from '@material-ui/core/TextField';
-import MenuItem from '@material-ui/core/MenuItem';
-
-import Paper from '@material-ui/core/Paper';
-import getCountries from '../Services/CountriesService'
-
+import getCountries, { getSingleCountry } from '../Services/CountriesService'
 import Card from '../Components/Card'
 
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import { TramRounded } from '@material-ui/icons';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -33,24 +30,35 @@ const useStyles = makeStyles((theme) => ({
   textField: {
     width: '65ch',
   },
+  primartText:{
+    color:'var(--text)',
+    textAlign: 'center'
+  },
   paper:{
-    padding: '5px 7px',
+    padding: '15px',
     backgroundColor:'var(--elements)',
+    boxShadow:'0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);'
+  },
+  filterArea: {
+    paddingLeft: 53,
+    paddingRight: 53
   }
 }));
 
 const Countries = () => {
   const history = useHistory()
-  const location = useLocation()
   const classes = useStyles();
 
   // States
   const [countries, setCountries] = useState([])
+  const [search, setSearch] = useState([])
   const [region, setRegion] = useState('All')
+  const [one, setOne] = useState(false)
+  const searchRef = React.createRef();
   const options = [
     {
       value: 'All',
-      label: 'All',
+      label: 'Filter by Region',
     },
     {
       value: 'africa',
@@ -80,10 +88,12 @@ const Countries = () => {
   /**
    * First load Countries
   */
-  useEffect(async ()=>{
-    let qry = await getCountries('All')
-    console.log(qry);
-    setCountries(qry)
+  useEffect(()=>{
+    async function getCount() {
+      let qry = await getCountries('All')
+      setCountries(qry)
+    }
+    getCount()
   }, [])
   
   /**
@@ -101,16 +111,29 @@ const Countries = () => {
    */
   const Filters = () => {
     return (
-      <Paper component="form" className={classes.paper}>
-        <IconButton type="submit" className={classes.iconButton} aria-label="search">
+      <span className={classes.paper}>
+        <IconButton onClick={()=> handleSearch()} className={classes.iconButton} aria-label="search">
           <SearchIcon/>
         </IconButton>
-        <InputBase id="search" placeholder="Search for a Country"
+        <InputBase id="search" 
+          ref={searchRef}
+          // onChange={(evt) => handleSearch(evt)}
+          onBlur={(evt) => handleSearch(evt.target.value)}
+          defaultValue = {search}
+          placeholder="Search for a Country"
           inputProps={{ 'aria-label': 'search google maps' }} />
-      </Paper>
+      </span>
       // <form className={classes.textField} noValidate autoComplete="off">
       // </form>
     )
+  }
+
+  const handleSearch = async (val) => {
+    let qry = await getSingleCountry(val === undefined ? searchRef.current.children[0].value : val)
+    setCountries(qry)
+    if(val !== undefined){
+      setSearch(val)
+    }
   }
 
   /**
@@ -118,24 +141,18 @@ const Countries = () => {
    */
   const SelectArea = () => {
     return (
-      <form noValidate autoComplete="off">
-        <div>
-          <TextField
-            id="standard-select-region"
-            select
-            label="Filter by Region"
-            value={region}
-            onChange={handleChange}
-            helperText="Please select your region"
-          >
-            {options.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </TextField>
-        </div>
-      </form>
+      <select
+        label="Filter by Region"
+        placeholder="Please select your region"
+        value={region}
+        onChange={handleChange}
+      >
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
     )
   }
 
@@ -145,38 +162,45 @@ const Countries = () => {
 
   return (
     <div className={classes.root}>
-      <Grid container className={classes.generalGrid}>
-        <Grid item xs={12} sm={6}>
-          <Filters/>
+        <Grid container className={classes.generalGrid}>
+          <Grid container className={classes.filterArea}>
+            <Grid item xs={12} sm={6}>
+              <Filters/>
+            </Grid>
+            <Grid container justify="flex-end" item xs={12} sm={6}>
+              <SelectArea/>
+            </Grid>
+          </Grid>
+          <Grid container>
+            {
+              countries === null ? <h1 className={classes.primartText}>
+                Sin registros
+              </h1> :
+                countries.map((element, key) => {
+                  return (
+                    <Grid 
+                      item
+                      key={key} 
+                      xs={12} 
+                      sm={6} 
+                      md={4} 
+                      lg={3} 
+                      className={classes.itemsGrid}
+                      onClick={() => {redirectCountrie(element.alpha3Code)}}
+                    >
+                      <Card
+                      image = {element.flag}
+                      name = {element.name}
+                      population = {element.population}
+                      region = {element.region}
+                      capital = {element.capital}
+                    />
+                    </Grid>
+                  )
+                }) 
+            }
+          </Grid>
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <SelectArea/>
-        </Grid>
-        <Grid container>
-          { countries.map((element, key) => {
-            return (
-              <Grid 
-                item
-                key={key} 
-                xs={12} 
-                sm={6} 
-                md={4} 
-                lg={3} 
-                className={classes.itemsGrid}
-                onClick={() => {redirectCountrie(element.alpha3Code)}}
-              >
-                <Card
-                image = {element.flag}
-                name = {element.name}
-                population = {element.population}
-                region = {element.region}
-                capital = {element.capital}
-              />
-              </Grid>
-            )
-          }) }
-        </Grid>
-      </Grid>
     </div>
   )
 }

@@ -5,27 +5,11 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 import Home from './Screens/Home'
-import Countrie from './Screens/Country'
 
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Router>
-      <Switch>
-        <Route path="/countrie/:id">
-          <Countrie />
-        </Route>
-        <Route path="/">
-          <Home />
-        </Route>
-      </Switch>
-    </Router>
+    <Home />
   </React.StrictMode>,
   document.getElementById('root')
 );
