@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 /**
- * Bar of a head site, set a Dark or ligth mode
+ * Bar of head site, set a Dark or ligth mode
  * @param {*} darkMode Boolean 
  */
 const Navigator = ({setDarkMode, dark}) => {
@@ -37,7 +37,7 @@ const Navigator = ({setDarkMode, dark}) => {
           </Typography>
           <IconButton edge="start" onClick={() => setDarkMode(!dark)}
             className={classes.menuButton} color="inherit" aria-label="menu">
-            <Brightness2Icon />
+            {dark ? <Brightness2Icon /> : <Brightness5Icon/>}
           </IconButton>
         </Toolbar>
       </AppBar>

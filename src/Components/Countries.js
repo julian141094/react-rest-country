@@ -147,7 +147,7 @@ const Countries = () => {
         <Grid container>
           { countries.map((element, key) => {
             return (
-              <Grid item xs={12} lg={3} className={classes.itemsGrid}>
+              <Grid item xs={12} sm={6} md={4} lg={3} className={classes.itemsGrid}>
                 <Card
                 image = {element.flag}
                 name = {element.name}
