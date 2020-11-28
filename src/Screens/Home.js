@@ -3,8 +3,14 @@ import Navigator from '../Components/Navigator'
 import Countries from '../Components/Countries'
 
 const Home = () => {
+  // State
   let [darkMode,setDarkMode] = useState(false)
   
+  // UseEffect
+
+  /**
+   * Set the general styles for the theme of material ui
+   */
   useEffect(() => {
     let theme = document.documentElement;
     var background, text, element

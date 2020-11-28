@@ -22,6 +22,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+/**
+ * Bar of a head site, set a Dark or ligth mode
+ * @param {*} darkMode Boolean 
+ */
 const Navigator = ({setDarkMode, dark}) => {
   const classes = useStyles();
   return (

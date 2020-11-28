@@ -1,6 +1,10 @@
 import React from 'react'
 import axios from 'axios'
 
+/**
+ * Get a countries by region or all 
+ * @param {*} zone string
+ */
 export default async function getCountries(zone) {
   let to_return = null
   if (zone === 'All') {
@@ -23,6 +27,10 @@ export default async function getCountries(zone) {
   return to_return
 }
 
+/**
+ * Get a countrie by the word of filter
+ * @param {*} element string
+ */
 export async function getSingleCountry(element) {
   let to_return = null
   await axios.get(`https://restcountries.eu/rest/v2/name/${element}`)

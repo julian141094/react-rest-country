@@ -10,6 +10,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
 import getCountries from '../Services/CountriesService'
 
+import Card from '../Components/Card'
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -71,22 +73,28 @@ const Countries = () => {
   
   
   // UseEffect
+
+  /**
+   * First load Countries
+  */
   useEffect(async ()=>{
     let qry = await getCountries('All')
     setCountries(qry)
   }, [])
-
-  useEffect(()=>{
-    console.log('Countries->', countries);
-  }, [countries])
-
   
+  /**
+   * Handler select region change
+   * @param {*} event 
+   */
   const handleChange = async (event) => {
     setRegion(event.target.value);
     let qry = await getCountries(event.target.value)
     setCountries(qry)
   };
   
+  /**
+   * Filter a Country with the word
+   */
   const Filters = () => {
     return (
       <Paper component="form" className={classes.paper}>
@@ -101,8 +109,9 @@ const Countries = () => {
     )
   }
 
-
-
+  /**
+   * Select to render countries of a specific region
+   */
   const SelectArea = () => {
     return (
       <form noValidate autoComplete="off">
@@ -126,12 +135,6 @@ const Countries = () => {
     )
   }
 
-  const Card = () => {
-    return (
-      <span>Banderas</span>
-    )
-  }
-
   return (
     <div className={classes.root}>
       <Grid container className={classes.generalGrid}>
@@ -141,15 +144,17 @@ const Countries = () => {
         <Grid item xs={12} sm={6}>
           <SelectArea/>
         </Grid>
-        <Grid item xs={12}>
-          <Card/>
-        </Grid>
         <Grid container>
           { countries.map((element, key) => {
             return (
-              <Grid item xs={3} className={classes.itemsGrid}>
-                {/* <Card/> */}
-                <span>{key}</span>
+              <Grid item xs={12} lg={3} className={classes.itemsGrid}>
+                <Card
+                image = {element.flag}
+                name = {element.name}
+                population = {element.population}
+                region = {element.region}
+                capital = {element.capital}
+              />
               </Grid>
             )
           }) }
