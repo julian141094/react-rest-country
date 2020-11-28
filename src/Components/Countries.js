@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Countries = () => {
-  const history = useHistory()
+  // const history = useHistory()
   const classes = useStyles();
 
   // States
@@ -156,9 +156,9 @@ const Countries = () => {
     )
   }
 
-  function redirectCountrie(alpha3Code){
-    history.push(`/countrie/:${alpha3Code}`)
-  }
+  // function redirectCountrie(alpha3Code){
+  //   history.push(`/countrie/:${alpha3Code}`)
+  // }
 
   return (
     <div className={classes.root}>
@@ -185,15 +185,15 @@ const Countries = () => {
                       sm={6} 
                       md={4} 
                       lg={3} 
-                      className={classes.itemsGrid}
-                      onClick={() => {redirectCountrie(element.alpha3Code)}}
-                    >
+                      >
+                      {/* onClick={() => {redirectCountrie(element.alpha3Code)}} */}
                       <Card
                       image = {element.flag}
                       name = {element.name}
                       population = {element.population}
                       region = {element.region}
                       capital = {element.capital}
+                      alpha3Code = {element.alpha3Code}
                     />
                     </Grid>
                   )

@@ -1,6 +1,7 @@
 import React from 'react'
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
+import { useHistory } from "react-router-dom";
 
 /**
  * Get the data of a country and return a card with the information
@@ -11,12 +12,13 @@ const Card = ({
   name,
   population,
   region,
-  capital
+  capital,
+  alpha3Code
 }) => {
 
   const useStyles = makeStyles((theme) => ({
     general: {
-      padding: 10
+      padding: 55
     },
     generalCard:{
       backgroundColor:'var(--elements)',
@@ -52,9 +54,15 @@ const Card = ({
     }
   }));
 
+  const history = useHistory()
+
+  function redirectCountrie(alpha3Code){
+    history.push(`/countrie/:${alpha3Code}`)
+  }
+
   const classes = useStyles();
     return(
-      <Grid container className={classes.general}>
+      <Grid container className={classes.general} onClick={() => {redirectCountrie(alpha3Code)}}>
         <Grid container className={classes.generalCard}>
           <Grid className={classes.img} >
           </Grid>

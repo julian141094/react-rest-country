@@ -94,6 +94,10 @@ const Countrie = () => {
       marginLeft: 10,
       marginTop: 10
     },
+    contentText: {
+      paddingLeft: 40,
+      paddingRight: 40
+    }
     }));
     
   const classes = useStyles();
@@ -123,8 +127,8 @@ const Countrie = () => {
             <Grid xs={12} md={6} className={classes.imageArea}>
               <Grid className={classes.img}/>
             </Grid>
-            <Grid xs={12} md={6} className={classes.textGeneralContainer}>
-              <Grid container>
+            <Grid xs={12} md={6}>
+              <Grid container className={classes.contentText}>
                 <Grid xs={12}>
                   <Grid className={classes.textArea}>
                     <Grid className={classes.textName}>
@@ -132,7 +136,7 @@ const Countrie = () => {
                     </Grid>
                   </Grid>
                 </Grid>
-                <Grid xs={12} md={6}>
+                <Grid xs={12} md={6} >
                   <Grid className={classes.textArea}>
                     <Grid>
                       <span className={classes.textBold}>Native Name </span>
