@@ -5,7 +5,8 @@ import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
 import getCountries, { getSingleCountry } from '../Services/CountriesService'
-import { TextareaAutosize } from '@material-ui/core';
+import Card from '../Components/Card'
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -74,22 +75,28 @@ const Countries = () => {
   
   
   // UseEffect
+
+  /**
+   * First load Countries
+  */
   useEffect(async ()=>{
     let qry = await getCountries('All')
     setCountries(qry)
   }, [])
-
-  useEffect(()=>{
-    console.log('Countries->', countries);
-  }, [countries])
-
   
+  /**
+   * Handler select region change
+   * @param {*} event 
+   */
   const handleChange = async (event) => {
     setRegion(event.target.value);
     let qry = await getCountries(event.target.value)
     setCountries(qry)
   };
   
+  /**
+   * Filter a Country with the word
+   */
   const Filters = () => {
     return (
       <span className={classes.paper}>
@@ -117,6 +124,9 @@ const Countries = () => {
     }
   }
 
+  /**
+   * Select to render countries of a specific region
+   */
   const SelectArea = () => {
     return (
       <select
@@ -134,12 +144,6 @@ const Countries = () => {
     )
   }
 
-  const Card = () => {
-    return (
-      <span>Banderas</span>
-    )
-  }
-
   return (
     <div className={classes.root}>
       <Grid container className={classes.generalGrid}>
@@ -149,9 +153,6 @@ const Countries = () => {
         <Grid container justify="flex-end" item xs={12} sm={6}>
           <SelectArea/>
         </Grid>
-        <Grid item xs={12}>
-          <Card/>
-        </Grid>
         <Grid container>
           {
             countries === null ? <h1 className={classes.primartText}>
@@ -160,8 +161,13 @@ const Countries = () => {
               countries.map((element, key) => {
                 return (
                   <Grid item xs={3} className={classes.itemsGrid}>
-                    {/* <Card/> */}
-                    <span>{key}</span>
+                    <Card
+                      image = {element.flag}
+                      name = {element.name}
+                      population = {element.population}
+                      region = {element.region}
+                      capital = {element.capital}
+                    />
                   </Grid>
                 )
               }) 
