@@ -12,6 +12,8 @@ import getCountries from '../Services/CountriesService'
 
 import Card from '../Components/Card'
 
+import { useHistory, useLocation } from "react-router-dom";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,7 +40,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Countries = () => {
-
+  const history = useHistory()
+  const location = useLocation()
   const classes = useStyles();
 
   // States
@@ -79,6 +82,7 @@ const Countries = () => {
   */
   useEffect(async ()=>{
     let qry = await getCountries('All')
+    console.log(qry);
     setCountries(qry)
   }, [])
   
@@ -135,6 +139,10 @@ const Countries = () => {
     )
   }
 
+  function redirectCountrie(alpha3Code){
+    history.push(`/countrie/:${alpha3Code}`)
+  }
+
   return (
     <div className={classes.root}>
       <Grid container className={classes.generalGrid}>
@@ -147,7 +155,16 @@ const Countries = () => {
         <Grid container>
           { countries.map((element, key) => {
             return (
-              <Grid item xs={12} sm={6} md={4} lg={3} className={classes.itemsGrid}>
+              <Grid 
+                item
+                key={key} 
+                xs={12} 
+                sm={6} 
+                md={4} 
+                lg={3} 
+                className={classes.itemsGrid}
+                onClick={() => {redirectCountrie(element.alpha3Code)}}
+              >
                 <Card
                 image = {element.flag}
                 name = {element.name}
